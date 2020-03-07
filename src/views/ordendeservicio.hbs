@@ -1,0 +1,155 @@
+{{#each orden}}
+<main class="content">
+    <div class="card bg-dark text-white">
+        <img src="{{img}}" class="card-img" alt="...">
+        <div class="card-img-overlay"> 
+            <h5 class="card-title">ORDEN DE SERVICIO {{id}}</h5>
+            <p class="card-text">Operadora de viajes TQ</p>
+            <p class="card-text">Santa Marta | Magdalena | Colombia</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card border-primary mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img id="qrImg" src="{{img}}"
+                            class="card-img" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body text-primary">
+                            <h5 class="card-title">Nit : 8668598-9</h5>
+                            <div class="mb-2">
+                                <i class="align-middle mr-2" data-feather="phone-call"></i> <span
+                                    class="align-middle card-text">+57 304-666-5396</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="align-middle mr-2" data-feather="mail"></i> <span
+                                    class="align-middle card-text">info@operadoradeviajestq.com</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="align-middle mr-2" data-feather="globe"></i> <span
+                                    class="align-middle card-text">www.operadoradeviajestq.com</span>
+                            </div>
+                            <p class="card-text"><small class="text-muted">CL 25 N°.32B-50 Santa Marta D.T.C.H.
+                                    Magdalena</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card border-primary mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img id="qrImg" src="{{imagen}}"
+                            class="card-img" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body text-primary">
+                            <h5 class="card-title text-right" id="fechaOrden">{{start}}</h5>
+                            <div class="mb-2">
+                                <i class="align-middle mr-2" data-feather="user"></i> <span
+                                    class="align-middle card-text">Contratante :</span> <span
+                                    class="align-middle text-muted">{{title}}</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="align-middle mr-2" data-feather="user-check"></i> <span
+                                    class="align-middle card-text">Conductor :</span> <span
+                                    class="align-middle text-muted">{{fullname}}</span>
+                            </div>
+                            <div class="mb-1">
+                                <i class="align-middle mr-2" data-feather="map"></i> <span
+                                    class="align-middle card-text">Transportadora :</span> <span
+                                    class="align-middle text-muted">{{transportadora}}</span>
+                            </div>
+                            <div class="mb-1">
+                                <i class="align-middle mr-2" data-feather="users"></i> <span
+                                    class="align-middle card-text">N° Pasajeros :</span> <span
+                                    class="align-middle text-muted">{{pax}}</span>
+                            </div>
+                            <!--<p class="card-text"><small class="text-muted">Confianos tu destino a cualquier parte del
+                                    país.</small></p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card text-left">
+        <div class="card-body">
+            <h5 class="card-title">Datos de Ruta</h5>
+            <p class="card-text">Confianos tu destino a cualquier parte del país.</p>
+            <table id="tableRuta" class="table table-sm table-hover display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Partida</th>
+                        <th>Destino</th>
+                        <th>Vuelo</th>
+                    </tr>
+                </thead>
+                <tbody class="text-primary">
+                    <tr>
+                        <th>{{partida}}</th>
+                        <th>{{destino}}</th>
+                        <th>{{vuelo}}</th>
+                    </tr>
+                </tbody>
+            </table>
+            <hr class="mb-2">
+            <h5 class="card-title"> Datos del Vehiculo</h5>
+            <table id="tableCar" class="table table-sm table-hover display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Clase</th>
+                        <th>Linea</th>
+                        <th>Modelo</th>
+                    </tr>
+                </thead>
+                <tbody class="text-primary">
+                    <tr>
+                        <th>{{placa}}</th>
+                        <th>{{marca}}</th>
+                        <th>{{clase}}</th>
+                        <th>{{linea}}</th>
+                        <th>{{modelo}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body text-primary" id="observa" style="display: none;">
+                    <h5 class="card-title">Observaciones</h5>
+                    <p class="card-text">{{Observaciones}}</p>
+                    <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+                </div>
+            </div>
+            <div class="card">
+                <input type="hidden" id="paxOrden" value="{{pasajeros}}">
+                <div class="card-body pasajeros" style="display: none;">
+                    <h5 class="card-title">Pasajeros | Grupo</h5>                    
+                    <table id="tablePax" class="table table-sm table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Pasajero</th>
+                                <th>Documento</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-primary"></tbody>
+                    </table>
+                    <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-footer text-muted">
+            Cualquier comentario o sugerencia del servicio prestado, por favor comunicarse con nosotros a traves de los
+            medios espuestos al inicio de este documento.
+        </div>
+    </div>
+</main>
+{{/each}}

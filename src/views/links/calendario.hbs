@@ -1,0 +1,486 @@
+<main class="">
+    <!--<div class="">
+        <select class="form-control-no-border select2" data-toggle="select2">
+            <optgroup label="Alaskan/Hawaiian Time Zone">
+                <option value="AK">Alaska</option>
+                <option value="HI">Hawaii</option>
+            </optgroup>
+            <optgroup label="Pacific Time Zone">
+                <option value="CA">California</option>
+                <option value="NV">Nevada</option>
+                <option value="OR">Oregon</option>
+                <option value="WA">Washington</option>
+            </optgroup>
+            <optgroup label="Mountain Time Zone">
+                <option value="AZ">Arizona</option>
+                <option value="CO">Colorado</option>
+                <option value="ID">Idaho</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NM">New Mexico</option>
+                <option value="ND">North Dakota</option>
+                <option value="UT">Utah</option>
+                <option value="WY">Wyoming</option>
+            </optgroup>
+            <optgroup label="Central Time Zone">
+                <option value="AL">Alabama</option>
+                <option value="AR">Arkansas</option>
+                <option value="IL">Illinois</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="OK">Oklahoma</option>
+                <option value="SD">South Dakota</option>
+                <option value="TX">Texas</option>
+                <option value="TN">Tennessee</option>
+                <option value="WI">Wisconsin</option>
+            </optgroup>
+            <optgroup label="Eastern Time Zone">
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="IN">Indiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="OH">Ohio</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WV">West Virginia</option>
+            </optgroup>
+        </select>
+    </div>-->
+    <div id="fullcalendar" class="p-1"></div>
+</main>
+
+
+
+<!-- MODAL ELIMINAR -->
+<div class="modal fade" id="ModalConfir" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h5>
+                <div class="d-inline-block mt-1 mr-3 mb-0 float-right">
+                    <a class="reditar" data-dismiss="modal" aria-label="Close">
+                        <i class="feather mr-0" data-feather="x"></i></a>
+                </div>
+            </div>
+            <div class="modal-body m-1">
+                <h2 class="text-center mb-3">Seguro desea eliminar esta reserva?</h2>
+                <button class="btn btn-outline-danger float-center" id="btnDelet" data-dismiss="modal"
+                    aria-label="Close">Si</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL EVENTOS -->
+<div class="modal fade" id="ModalEventos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class=" ml-auto">
+                    <a class="reditar sineditar" id="editarreserva">
+                        <i class="feather mr-3" data-feather="edit-3"></i></a>
+                    <a class="reditar" id="eliminar">
+                        <i class="feather mr-3" data-feather="trash-2"></i></a>
+                    <a class="reditar" id="irOrden">
+                        <i class="feather mr-3" data-feather="external-link"></i></a>
+                    <a class="reditar" data-toggle="dropdown">
+                        <i class="feather mr-3" data-feather="more-vertical"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <button class="dropdown-item" type="button">Aprovar</button>
+                        <button class="dropdown-item" type="button">Another</button>
+                        <button class="dropdown-item" type="button">Somethi</button>
+                    </div>
+                    <a class="reditar" data-dismiss="modal" aria-label="Close">
+                        <i class="feather mr-0" data-feather="x"></i></a>
+                </div>
+            </div>
+            <div class="modal-body m-1">
+                <input class="idreserv" id="idreserv" type="hidden" value="">
+                <input id="ruta" type="hidden" value="">
+                <input id="cliente" type="hidden" value="">
+
+                <div id="ingresaClient" style="display: none;">
+                    <div class="row">
+                        <div class="col align-self-end">
+                            <div class="d-inline-block mt-1 mr-2 mb-0 float-right">
+                                <a class="reditar cerrarClient"><i class="feather mr-0"
+                                        data-feather="arrow-left-circle"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-9 col-sm-9">
+                            <div class="mb-4">
+                                <i class="feather-lg text-warning mr-0 mb-2" data-feather="circle"></i>
+                                <spam class="h3 tituloClient"></spam>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-xs-3 col-sm-3">
+                            <i class="feather-md text-primary mr-0" data-feather="layers"></i>
+                            <span class="h5">Tipo de cliente:</span>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <label class="custom-control ml-1 custom-radio">
+                                <input name="tipoClient" type="radio" class="custom-control-input" value="2">
+                                <span class="custom-control-label">Agencia</span>
+                            </label>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <label class="custom-control ml-1 custom-radio">
+                                <input name="tipoClient" type="radio" class="custom-control-input" value="4">
+                                <span class="custom-control-label">Hotel</span>
+                            </label>
+                        </div>
+                        <div class="col-xs-2 col-sm-2">
+                            <label class="custom-control ml-1 custom-radio mb-2">
+                                <input name="tipoClient" type="radio" class="custom-control-input" value="3">
+                                <span class="custom-control-label">Persona</span>
+                            </label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-between mb-1">
+                        <div class="col-xs-6 col-sm-6">
+                            <div class="mb-2">
+                                <i class="feather-md text-primary mr-0" data-feather="credit-card"></i>
+                                <input class="form-control-no-border reditar nit" type="text"
+                                    placeholder="Documento o nit..." data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Documento o nit" style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            <div class="mb-2">
+                                <i class="feather-md text-primary mr-0" data-feather="mail"></i>
+                                <input class="form-control-no-border reditar email" type="text" placeholder="Email..."
+                                    data-toggle="tooltip" data-placement="top" data-container="body"
+                                    title="Nombre del pax" style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mb-1">
+                        <div class="col-xs-6 col-sm-6">
+                            <div class="mb-2">
+                                <i class="feather-md text-primary mr-0" data-feather="phone-call"></i>
+                                <input class="form-control-no-border reditar tel" type="text"
+                                    placeholder="Telefono o movil..." data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Movil o telefono" style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6">
+                            <div class="mb-2">
+                                <i class="feather-md text-primary mr-0" data-feather="map-pin"></i>
+                                <input class="form-control-no-border reditar addres" type="text"
+                                    placeholder="Direccion..." data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Direccion" style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="mb-2">
+                                <i class="feather-md text-primary mr-0" data-feather="globe"></i>
+                                <input class="form-control-no-border reditar web" type="text" placeholder="Sitio web..."
+                                    data-toggle="tooltip" data-placement="top" data-container="body" title="Sitio web"
+                                    style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col align-self-end">
+                            <div class="d-inline-block mt-1 mb-2 mr-3 float-right">
+                                <button class="btn btn-pill btn-sm btn-primary mb-1" id="registraClient"><i class="mr-1"
+                                        data-feather="check-circle"></i>
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">Registrar cliente</font>
+                                    </font>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editar">
+                    <div class="row">
+                        <div class="col-xs-9 col-sm-9">
+                            <div class="btn-group btn-group-sm">
+                                <div class="mb-1 reserv">
+                                    <i class="feather-lg text-warning mr-0 mb-2" data-feather="circle"></i>
+                                    <input class="form-control-no-border h3 reditar  dropdown-toggle" id="reserva"
+                                        type="text" placeholder="Reservado a..." data-toggle="tooltip"
+                                        data-placement="top" data-container="body" title="Haz click para editar reserva"
+                                        autocomplete="off" style="width: 85%; padding: 5px;" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                        <div class="progress-bar bg-primary" role="progressbar"
+                                            style="height: 20%; width: 100%"></div>
+                                    </div>
+                                    <div class="dropdown-menu item">
+                                        {{#each clientes}}
+                                        <a class="nombres dropdown-item" id="{{id}}"
+                                            style="display: none;">{{nombre}}</a>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 mt-3">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mb-1" data-feather="dollar-sign"></i><input
+                                    class="form-control-no-border reditar h6" id="precio" type="text"
+                                    placeholder="Valor..." data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Haz click para editar precio" data-mask="000,000,000"
+                                    data-mask-reverse="true" data-mask-selectonfocus="true"
+                                    style="width: 80%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center align-items-center mb-3">
+                        <div class="col-xs-4 col-sm-4">
+                            <div class="mb-1">
+                                <i class="align-middle mr-0" data-feather="calendar"></i>
+                                <span class="badge badge-primary fecha" id="fecha" data-toggle="tooltip"
+                                    data-placement="top" data-container="body" title="Haz click para editar fecha"
+                                    style="width: 80%;"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3">
+                            <div class="mb-1">
+                                <i class="align-middle mr-0" data-feather="clock"></i>
+                                <span class="badge badge-primary" id="tiempo" data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Tiempo estimado del viaje"
+                                    style="width: 80%;">Tiempo</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3">
+                            <div class="mb-1">
+                                <i class="align-middle mr-0" data-feather="map-pin"></i>
+                                <span class="badge badge-primary" id="kilometros" data-toggle="tooltip"
+                                    data-placement="top" data-container="body" title="Distancia entre ubicaciones"
+                                    style="width: 80%;">klmts</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center minh-100">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mb-1" data-feather="users"></i>
+                                <input class="form-control-no-border reditar" id="npasajeros" type="number"
+                                    placeholder="N° de pasajeros" data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Haz click para editar # pax"
+                                    style="width: 85%; padding: 1px;" autocomplete="off">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mb-1" data-feather="tag"></i>
+                                <input class="form-control-no-border reditar" id="vuelo" type="text"
+                                    placeholder="N° de vuelo" data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Haz click aqui e ingresar n° d vuelo"
+                                    style="width: 85%; padding: 1px;" autocomplete="off">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mb-1" data-feather="refresh-cw"></i>
+                                <input class="form-control-no-border reditar" id="yvuelta" type="text"
+                                    placeholder="Si o No" data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Haz click aqui para editar"
+                                    style="width: 85%; padding: 1px;" autocomplete="off">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                                <div class="item yvuelta" style="display: none;">
+                                    <a class="nombres encontrado">SI...</a>
+                                </div>
+                                <div class="item yvuelta" style="display: none;">
+                                    <a class="nombres encontrado">NO...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <input class="form-control-no-border reditar" id="origen" type="hidden">
+                    <input class="form-control-no-border reditar" id="destino" type="hidden">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div style="display: none">
+                                <input id="origin-input" class="controls mapa form-control-no-border reditar"
+                                    type="text" placeholder="Ingrese Origen">
+
+                                <input id="destination-input" class="controls mapa form-control-no-border reditar"
+                                    type="text" placeholder="Ingrese Destino">
+                            </div>
+                            <div class="content" id="map" style="height: 200px; width: 100%;"></div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-9 col-sm-9">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mr-0" data-feather="align-left"
+                                    style="margin-top: -5%;"></i>
+                                <textarea id="observacion" class="form-control-no-border reditar observacion"
+                                    placeholder="Deja una observación de facturacion..." name="descripcion"
+                                    cols="60" rows="1" data-toggle="tooltip" data-placement="top" data-container="body"
+                                    title="Haz click aqui en ingresa las observaciones" style="width: 90%;"></textarea>
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6">
+                            <i class="feather-md text-primary mb-2" data-feather="users"></i>
+                            <input class="form-control-no-border reditar group" id="grupo" type="text"
+                                placeholder="Grupo..." data-toggle="tooltip" data-placement="top" data-container="body"
+                                title="Nombre del Grupo" style="width: 85%; padding: 1px;" autocomplete="off">
+                            <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="height: 20%; width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col align-self-end">
+                            <button class="btn btn-pill btn-sm btn-primary mb-2 mr-3 float-right" id="agregarpax"><i
+                                    class="mr-1" data-feather="user-plus"></i>
+                                <font style="vertical-align: inherit;">
+                                    <font style="vertical-align: inherit;">Agregar pax</font>
+                                </font>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row pasajeros" style="display: none;">
+                        <div class="col-xs-11 col-sm-11">
+                            <div class="mb-0">
+                                <div class="mb-3 pasajero" id="pasajero" data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Haz doblCclick para eliminar pax"><i
+                                        class="feather-md text-primary mr-1" data-feather="users"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row datospax justify-content-center align-items-center minh-100" style="display: none;">
+                        <div class="col-xs-4 col-sm-4">
+                            <i class="feather-md text-primary mb-2" data-feather="user"></i>
+                            <input class="form-control-no-border reditar nomb" type="text" placeholder="Nombre..."
+                                data-toggle="tooltip" data-placement="top" data-container="body" title="Nombre del pax"
+                                style="width: 85%; padding: 1px;" autocomplete="off">
+                            <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="height: 20%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mb-2" data-feather="credit-card"></i>
+                                <input class="form-control-no-border reditar docu" type="text"
+                                    placeholder="documento..." data-toggle="tooltip" data-placement="top"
+                                    data-container="body" title="Documento del pax" autocomplete="off"
+                                    style="width: 85%; padding: 1px;">
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-9 col-sm-9">
+                            <div class="mb-1">
+                                <i class="feather-md text-primary mr-0" data-feather="align-left"
+                                    style="margin-top: -14.5%;"></i>
+                                <textarea id="descripcion" class="form-control-no-border reditar observacion"
+                                    placeholder="Deja en claro cualquier observacio que tengas..." name="descripcion"
+                                    cols="60" rows="2" data-toggle="tooltip" data-placement="top" data-container="body"
+                                    title="Haz click aqui en ingresa las observaciones" style="width: 90%;"></textarea>
+                                <div class="progress progress-sm shadow-sm mb-0 reditarh" style="display: none;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="height: 20%; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4">
+                            <div class="mb-0">
+                                <i class="feather-md text-primary mr-0" data-feather="user"></i>
+                                <input type="hidden" id="user" value="{{user.id}}">
+                                <span class="badge badge-primary user" data-toggle="tooltip" data-placement="right"
+                                    data-container="body" title="Creador de la reserva">{{user.fullname}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--fin del body modal-->
+            <div class="modal-footer editarf">
+                <a class="reditar mr-2 h4">Cancelar</a>
+                <a class="reditar mr-2 h4" id="rguardar">Guardar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END primary modal -->
+<!-- BEGIN success modal -->
