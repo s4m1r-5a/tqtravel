@@ -891,7 +891,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             guia: '',
             ruta: $("#ruta").val(),
             partida: $('#origen').val(),
-            destino: $('#destenio').val(),
+            destino: $('#destino').val(),
             observaciones: $('#descripcion').val(),
             usuario: $('#user').val(),
             creador: $('.user').html(),
