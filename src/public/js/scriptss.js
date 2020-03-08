@@ -475,7 +475,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
                 urlRut.origen = place.name
             } else {
                 me.destinationPlaceId = place.place_id;
-                $('#destenio').val(`${place.name}, ${filt[0]}`)
+                $('#destino').val(`${place.name}, ${filt[0]}`)
                 urlRut.destino = place.name
             }
             me.route();
