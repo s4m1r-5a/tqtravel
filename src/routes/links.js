@@ -10,7 +10,7 @@ const request = require('request');
 const axios = require('axios');
 //const moment = require('moment');
 const moment = require('moment-timezone');
-moment.locale('es'); 
+moment.locale('es');
 
 
 
@@ -84,12 +84,12 @@ router.get('/factura', isLoggedIn, async (req, res) => {
     });
     const reserv = await pool.query(`SELECT * FROM  reservas WHERE id = ${reservs.slice(0, -9)}`);
     const client = await pool.query(`SELECT * FROM clientes WHERE id = ? OR nombre = ?`, [reserv[0].cliente, cliente]);
-    reserv.map((t)=>{
+    reserv.map((t) => {
         o = moment(t.start).tz("America/New_York")
         //t.start = moment.utc(o).format('YYYY-MM-DD H:mm') 
         t.start = o.utc().format();
         t.pasajeros = t.pasajeros.split(',')[0]
-    });       
+    });
     res.render('links/factura', { datosc, client, reserv });
 });
 router.post('/generarafactura', async (req, res) => {
@@ -99,7 +99,7 @@ router.post('/generarafactura', async (req, res) => {
     const reser = reservas.split("-");
     reser.forEach(function (item, index) {
         reservs += `${item} OR id = `
-    });    
+    });
     await pool.query(`UPDATE reservas SET factura = ${factura.insertId} WHERE id = ${reservs.slice(0, -9)}`);
     res.send(true);
 });
@@ -117,14 +117,14 @@ router.post('/eliminarfactura', async (req, res) => {
 router.post('/report', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND start BETWEEN '${start}' AND '${end}'`);    
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND start BETWEEN '${start}' AND '${end}'`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
 router.post('/report2', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE start BETWEEN '${start}' AND '${end}'`);    
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE start BETWEEN '${start}' AND '${end}'`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
@@ -183,7 +183,7 @@ router.get('/orden', isLoggedIn, async (req, res) => {
     if (r.id.length) {
         qery += ' WHERE o.id = ?'
         const orden = await pool.query(qery, r.id);
-        orden[0].start = moment.utc(r.f).format('LLL');        
+        orden[0].start = moment.utc(r.f).format('LLL');
         const imag = { i: `http://api.qrserver.com/v1/create-qr-code/?data=https://tqtravel.herokuapp.com/ordendeservicio?id=${r.id}` }
         res.render('links/orden', { orden, imag });
 
@@ -221,8 +221,14 @@ router.get('/social', isLoggedIn, (req, res) => {
 router.get('/recarga', isLoggedIn, (req, res) => {
     res.render('links/recarga');
 });
-router.post('/add', isLoggedIn, async (req, res) => {    
-    await pool.query('INSERT INTO reservas set ?', req.body);    
+router.post('/add', isLoggedIn, async (req, res) => {
+    const { id, title, cliente, pasajeros, start, docgrupo, grupo, adicionales, guia, ruta,
+        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax } = req.body;
+    const ingreso = {
+        title, cliente, pasajeros, start, docgrupo, grupo, adicionales, guia, ruta,
+        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax
+    };
+    await pool.query('INSERT INTO reservas set ?', ingreso);
     res.send(true);
 });
 router.post('/edit', isLoggedIn, async (req, res) => {
@@ -329,7 +335,7 @@ router.post('/map', async (req, res) => {
         idDestino,
         precio: tarifa,
         distancia: datos.km,
-        tiempo: datos.tmpo       
+        tiempo: datos.tmpo
     }
     const r = await pool.query('INSERT INTO rutas set ?', ruta);
     datos.id = r.insertId
