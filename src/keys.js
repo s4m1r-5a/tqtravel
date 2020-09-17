@@ -26,7 +26,6 @@ module.exports = {
         categoria: 'i'
     },
     Google: {
-        ApiKey: 'AIzaSyA_2TwyNJiGQwKXDVHOM4_I3jg69qvHc-Y',
         client_id: "507038552414-0d2oul1ks021a2ajvh7p2771qmoel9ln.apps.googleusercontent.com", // 358691758390-ea426ocipho2d13q7aku48q3gmo9ktal.apps.googleusercontent.com
         project_id: "still-toolbox-253319",
         auth_uri: "https://accounts.google.com/o/oauth2/auth",
