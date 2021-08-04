@@ -310,7 +310,7 @@ router.post('/clientes', isLoggedIn, async (req, res) => {
 
 router.post('/map', async (req, res) => {
     const { origen, destino, idOrigen, idDestino } = req.body;
-    var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=place_id:${idOrigen}&destinations=place_id:${idDestino}&key=AIzaSyA_2TwyNJiGQwKXDVHOM4_I3jg69qvHc-Y`
+    var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=place_id:${idOrigen}&destinations=place_id:${idDestino}&key=AIzaSyB_2RlIZ6QABu0dzJyF3oaA9dmlVs1aLQc`
     const resp = await axios.get(url);
 
     var tarifa = 0,
