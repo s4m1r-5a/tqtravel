@@ -1,25 +1,11 @@
 module.exports = {
     database: {
         connectionLimit: 1000,
-        host: '96.43.143.58',
-        user: 'admin',
-        password: 'C0l0mb1@',
+        host: '',
+        user: '',
+        password: '',
         database: 'tqtravel',
         port: 3306
-    },
-    database1: {
-        connectionLimit: 100,
-        host: '213.190.6.64',
-        user: 'u152781536_samir',
-        password: '5a1d4rr1a9A*',
-        database: 'u152781536_dbtq'
-    },
-    database2: {
-        connectionLimit: 10,
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'db_links'
     },
     registro: {
         pin: 'hola',
