@@ -1,9 +1,9 @@
 module.exports = {
     database: {
         connectionLimit: 1000,
-        host: '',
-        user: '',
-        password: '',
+        host: '96.43.143.58',
+        user: 'admin',
+        password: 'C0l0mb1@',
         database: 'tqtravel',
         port: 3306
     },
