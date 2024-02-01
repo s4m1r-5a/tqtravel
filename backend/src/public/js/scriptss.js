@@ -1299,9 +1299,8 @@ if (window.location == `${window.location.origin}/links/reportes`) {
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if (window.location == `${window.location.origin}/links/facturas`) {
-    let recargada = true,
-        total = 0,
-        cliente = "";
+    let facture = { client: null, bookings: [], num: 0, total: 0 }
+    let recargada = true
     minDateFilter = "";
     maxDateFilter = "";
     $.fn.dataTableExt.afnFiltering.push(
@@ -1354,11 +1353,12 @@ if (window.location == `${window.location.origin}/links/facturas`) {
                     className: 'btn btn-secondary',
                     action: function () {
                         if ($('#facturas span').text().length) {
+                            const { client, num, bookings, total } = facture
                             let datosfactura = {
-                                cliente,
-                                nreservas: $('.facturas').text(),
-                                reservas: $('#facturas').text().trim().replace(/(?!\w|\s).|  /g, "-"),
-                                total: $('.total').text().replace(/(?!\w|\s).| /g, ""),
+                                cliente: client,
+                                nreservas: num,
+                                reservas: bookings.join("-"),
+                                total: total,
                                 estado: 'pendiente'
                             };
 
@@ -1367,12 +1367,12 @@ if (window.location == `${window.location.origin}/links/facturas`) {
                                 url: '/links/generarafactura',
                                 data: datosfactura,
                                 success: function (data) {
+                                    facture =  { client: null, bookings: [], num: 0, total: 0 }
                                     table.rows('.selected').remove().draw(false);
-                                    total = 0;
                                     $('#facturas span').remove();
                                     $('span.total').text('');
                                     $('p.clientes').text('');
-                                    $('.facturas').html('0');
+                                    $('.facturas').html(null);
                                     SMSj('success', 'Factura generada exitosamente')
                                     table2.ajax.reload(function (json) {
                                         $("#cuadro2").hide("slow");
@@ -1507,27 +1507,30 @@ if (window.location == `${window.location.origin}/links/facturas`) {
     }
 
     $('#datatable').on('click', 'tr', function () {
-        var data = $('#datatable').DataTable().row(this).data();
-        if (cliente === "" || cliente === data.title || $('span.facturas').text() === "0") {
-            if (cliente !== data.title) {
+        const { client } = facture
+        const data = $('#datatable').DataTable().row(this).data();
+        
+        if (!client || client === data.title || $('span.facturas').text() === "0") {
+            if (client !== data.title) {
                 $('p.clientes').text(`Facturacion realizada a ${data.title}`);
             }
-            cliente = data.title;
+
             $(this).toggleClass('selected');
-            var facturas = $('#datatable').DataTable().rows('.selected').data().length,
-                factura = ` <span class="badge badge-success ${data.id}"> ${data.id}</span>`;
-            $('.facturas').html(facturas);
-            if ($(`span.${data.id}`).length) {
-                $("span").remove(`.${data.id}`);
-                total -= parseFloat(data.valor.replace(/(?!\w|\s).| /g, ""));
-            } else {
-                $('#facturas').append(factura);
-                total += parseFloat(data.valor.replace(/(?!\w|\s).| /g, ""));
+            let bills = $('#datatable').DataTable().rows('.selected').data()
+
+            facture =  { 
+                client: data.title, 
+                bookings: bills.map(e => e.id), 
+                num: bills.length, 
+                total: bills.reduce((a, e) => a + parseFloat(e.valor.replace(/(?!\w|\s).| /g, "")), 0) 
             }
+            
+            $('#facturas').html(facture.bookings.map(e => ` <span class="badge badge-success"> ${e}</span>`).join('\n'));
+
             $('span.total').mask('000,000,000', { reverse: true });
-            $('span.total').text(Moneda(total));
+            $('span.total').text(Moneda(facture.total));
         } else {
-            SMSj('info', 'No puedes seleccionar una reserva que no pertenesca a este clliente ' + cliente)
+            SMSj('info', 'No puedes seleccionar una reserva que no pertenesca a este clliente ' + client)
         }
     });
     // Eliminar facturas
@@ -2006,27 +2009,33 @@ if (window.location.pathname == `/links/factura`) {
 
         //$('#totalLetras').text(`POR CONCEPTO DE ${$('#nservicios').val()} SERVICIOS PRESTADOS CON UN VALOR EXPRESADO EN LETRAS DE ${NumeroALetras($('#vLetras').val())}`)
         $('#totalLetras').text(`${NumeroALetras($('#vLetras').val())} MCT********`)
-        var table2 = $('#tablaFactura').DataTable({
+        $('#tablaFactura').DataTable({
             paging: false,
             ordering: false,
             info: false,
             searching: false,
-            //deferRender: true,
             autoWidth: true,
             responsive: false,
-            columnDefs: [{
-                render: function (data, type, row) {
-                    return `El día ${moment(row[3]).format('ll')}, ${row[2]} pasajeros fueron trasladados de ${row[4]} con destino a ${row[5]}. ${row[8] ? row[8] + '.' : ''} Grupo o pasajero que hace referencia a la reserva ${row[10] ? row[10] : row[9]}`;
+            columnDefs: [
+                {
+                    targets: 1,
+                    render: function (data, type, row) {
+                        return `El día ${moment(row[3]).format('ll')}, ${row[2]} pasajeros fueron trasladados de ${row[4]} con destino a ${row[5]}. ${row[8] ? row[8] + '.' : ''} Grupo o pasajero que hace referencia a la reserva ${row[10] ? row[10] : row[9]}`;
+                    }
                 },
-                targets: 1
-            },
-            {
-                render: function (data, type, row) {
-                    return '$' + Moneda(parseFloat(data.replace(/(?!\w|\s).| /g, "")));
+                {
+                    targets: 10,
+                    render: function (data, type, row) {
+                        return data ? data : 'sin info';
+                    }
                 },
-                targets: 10
-            },
-            { visible: false, targets: [2, 3, 4, 5, 6, 7, 8, 9] }
+                {
+                    targets: 11,
+                    render: function (data, type, row) {
+                        return '$' + Moneda(parseFloat(data.replace(/(?!\w|\s).| /g, "")));
+                    }
+                },
+                { visible: false, targets: [2, 3, 4, 5, 6, 7, 8, 9] }
             ]
         });
         window.print();

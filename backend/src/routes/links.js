@@ -69,48 +69,30 @@ router.get('/facturas', isLoggedIn, async (req, res) => {
 });
 router.get('/factura', isLoggedIn, async (req, res) => {
     const { id, fecha, cliente, nreservas, reservas, total } = req.query;
-    const datosc = {
-        id,
-        fecha,
-        cliente,
-        nreservas,
-        reservas,
-        total
-    };
-    let reservs = "";
-    const reser = reservas.split("-");
-    reser.forEach(function (item, index) {
-        reservs += `${item} OR id = `
-    });
-    const reserv = await pool.query(`SELECT * FROM  reservas WHERE id = ${reservs.slice(0, -9)}`);
+    const datosc = { id, fecha, cliente, nreservas, reservas, total };
+    const reservs = reservas.split("-").filter(e => e).join(', ');
+    const reserv = await pool.query(`SELECT * FROM  reservas WHERE id IN(${reservs})`);
     const client = await pool.query(`SELECT * FROM clientes WHERE id = ? OR nombre = ?`, [reserv[0].cliente, cliente]);
     reserv.map((t) => {
         o = moment(t.start).tz("America/New_York")
-        //t.start = moment.utc(o).format('YYYY-MM-DD H:mm') 
         t.start = o.utc().format();
         t.pasajeros = t.pasajeros.split(',')[0]
     });
     res.render('links/factura', { datosc, client, reserv });
 });
 router.post('/generarafactura', async (req, res) => {
-    const { reservas } = req.body;
-    let reservs = "";
-    const factura = await pool.query(`INSERT INTO facturas set ?`, req.body);
-    const reser = reservas.split("-");
-    reser.forEach(function (item, index) {
-        reservs += `${item} OR id = `
-    });
-    await pool.query(`UPDATE reservas SET factura = ${factura.insertId} WHERE id = ${reservs.slice(0, -9)}`);
+    const data = req.body
+    const { reservas } = data;
+    const reservs = reservas.split("-").filter(e => e).join(', ');
+    const factura = await pool.query(`INSERT INTO facturas set ?`, data);
+
+    await pool.query(`UPDATE reservas SET factura = ${factura.insertId} WHERE id IN(${reservs})`);
     res.send(true);
 });
 router.post('/eliminarfactura', async (req, res) => {
     const { id, reservas } = req.body;
-    let reservs = "";
-    const reser = reservas.split("-");
-    reser.forEach(function (item, index) {
-        reservs += `${item} OR id = `
-    });
-    await pool.query(`UPDATE reservas SET factura = NULL WHERE id = ${reservs.slice(0, -9)}`);
+    const reservs = reservas.split("-").filter(e => e).join(', ');
+    await pool.query(`UPDATE reservas SET factura = NULL WHERE id IN(${reservs})`);
     await pool.query(`DELETE FROM facturas WHERE id = ?`, id);
     res.send(true);
 });
