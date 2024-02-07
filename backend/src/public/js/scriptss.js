@@ -884,7 +884,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             title: $("#reserva").val(),
             cliente: $("#cliente").val(),
             pasajeros: $('#pasajero spam.eli').text(),
-            start: HHmm24($('#fecha').html()),
+            // start: HHmm24($('#fecha').html()), //'sacar campo de la base de datos'
             docgrupo: '',
             grupo: $('#grupo').val(),
             adicionales: $('#observacion').val(),
@@ -899,6 +899,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             vuelo: $('#vuelo').val(),
             idavuelta: $('#yvuelta').val() || 'NO',
             pax: $('#npasajeros').val(),
+            fecha: moment($('#fecha').html()).unix()
         }
     };
 
@@ -927,7 +928,8 @@ if (window.location == `${window.location.origin}/links/calendario`) {
     var d = date.getDate(),
         m = date.getMonth(),
         y = date.getFullYear()
-    $('#fullcalendar').fullCalendar({
+        $(document).ready(function () {  
+            $('#fullcalendar').fullCalendar({
         monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
         monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
@@ -953,20 +955,19 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             }
         },
         eventRender: function (event, element) {            
-            var content = [
-                `<div >${event.start.format('LLL')}</div>`,
+            var content = [ 
+                `<div >${moment.unix(event.fecha).format('LLLL')}</div>`,
                 `<div >Origen : ${event.partida}</div>`,
                 `<div >Destino : ${event.destino}</div>`,
-            ].join('');
+            ].join(''); 
 
-            var titulo = [`<div id="titu"><i><h3>${event.title}</h3></i></div>`,].join('');
             element.popover({
                 animation: true,
                 delay: 700,
                 placement: "auto",
                 trigger: 'hover',
-                title: titulo,
-                content: content,
+                title: `<div id="titu"><i><h3>${event.title}</h3></i></div>`,
+                content,
                 template: Template,
                 html: true
             });
@@ -984,15 +985,14 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             $('#editarreserva').hide();
             clik = true
         }, //Cuando se da click en un espacio vacio de un dia del calendario
-
         eventClick: function (calEvent, jsEvent, view) {
-            $('#fecha').data('daterangepicker').setStartDate(calEvent.start.format('YYYY-MM-DD HH:mm'));
+            $('#fecha').data('daterangepicker').setStartDate(moment.unix(calEvent.fecha).format('YYYY-MM-DD HH:mm'));
             $('#eliminar').show();
             $('#idreserv').val(calEvent.id);
             $("#reserva").val(calEvent.title);
             $("#cliente").val(calEvent.cliente)
             $("#ruta").val(calEvent.ruta)
-            $('#fecha').html(calEvent.start.format('YYYY-MM-DD hh:mm A'));
+            $('#fecha').html(moment.unix(calEvent.fecha).format('YYYY-MM-DD hh:mm A'));
             $('.ruta').html(`${calEvent.partida} Hacia ${calEvent.destino}`);
             $('#origin-input').val(calEvent.partida);
             $('#destination-input').val(calEvent.destino);
@@ -1025,13 +1025,13 @@ if (window.location == `${window.location.origin}/links/calendario`) {
         }, //Recoje los datos de la base de datos
         editable: true,
         eventDrop: function (calEvent) {
-            $('#fecha').data('daterangepicker').setStartDate(calEvent.start.format('YYYY-MM-DD HH:mm'));
+            $('#fecha').data('daterangepicker').setStartDate(moment.unix(calEvent.fecha).format('YYYY-MM-DD HH:mm'));
             $('#eliminar').show();
             $('#idreserv').val(calEvent.id);
             $("#reserva").val(calEvent.title);
             $("#cliente").val(calEvent.cliente)
             $("#ruta").val(calEvent.ruta)
-            $('#fecha').html(calEvent.start.format('YYYY-MM-DD hh:mm A'));
+            $('#fecha').html(moment.unix(calEvent.fecha).format('YYYY-MM-DD hh:mm A'));
             $('.ruta').html(`${calEvent.partida} Hacia ${calEvent.destino}`);
             $('#origin-input').val(calEvent.partida);
             $('#destination-input').val(calEvent.destino);
@@ -1057,10 +1057,12 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             RecolectarDatosGUI();
             EnviarInformacion('modificar', NuevoEvento, true);
         } //Para arrastrar las reservas en el tablero 
-    })
+            })
+        })
     $('#ModalEventos').on('shown.bs.modal', function () {
         //initMap()
     });
+
     $('#ModalEventos').on('hidden.bs.modal', function () {
         $('#idreserv').val('');
         $('#ruta').val('');
@@ -1230,9 +1232,9 @@ if (window.location == `${window.location.origin}/links/reportes`) {
             { data: "title" },
             { data: "pax" },
             {
-                data: "start",
+                data: "fecha",
                 render: function (data, method, row) {
-                    return moment.utc(data).format('YYYY-MM-DD HH:mm') //pone la fecha en un formato entendible
+                    return moment.unix(data).format('YYYY-MM-DD HH:mm')
                 }
             },
             { data: "partida" },
@@ -1442,9 +1444,9 @@ if (window.location == `${window.location.origin}/links/facturas`) {
             { data: "cliente" },
             { data: "pax" },
             {
-                data: "start",
+                data: "fecha",
                 render: function (data, method, row) {
-                    return moment.utc(data).format('YYYY-MM-DD HH:mm') //pone la fecha en un formato entendible
+                    return moment.unix(data).format('YYYY-MM-DD HH:mm') //pone la fecha en un formato entendible
                 }
             },
             { data: "partida" },
@@ -1650,7 +1652,7 @@ if (window.location.pathname == `/links/orden`) {
     //moment.locale('es');
     $("#qrImg").attr("src", $('#imgQr').val());
     $(document).ready(function () {
-        //$('#fechaOrden').text(moment.utc($('#fechaOrden').text()).format('LLL'))
+        $('#fechaOrden').text(moment.unix($('#fechaOrden').text()).format('LLL'))
         if ($('#observa p').html()) {
             $('#observa').show()
         }
@@ -1924,10 +1926,10 @@ if (window.location.pathname == `/links/ordendeservicio`) {
         columns: [
             { data: "id" },
             {
-                data: "start",
+                data: "fecha",
                 className: 'te',
                 render: function (data, method, row) {
-                    return moment.utc(data).format('lll') //pone la fecha en un formato entendible
+                    return moment.unix(data).format('lll') //pone la fecha en un formato entendible
                 }
             },
             {

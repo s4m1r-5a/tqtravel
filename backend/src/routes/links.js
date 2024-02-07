@@ -22,6 +22,8 @@ router.get('/calendario', async (req, res) => {
 router.get('/reservas', async (req, res) => {
     let start = req.query.start || '2018-01-30',
         end = req.query.end || '2025-12-31'
+
+        console.log(req.query)
     const reservas = await pool.query(`SELECT 
     r.id, 
     r.title,
@@ -40,9 +42,11 @@ router.get('/reservas', async (req, res) => {
     r.valor, 
     r.creador,
     r.factura, 
-    u.fullname 
-    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE start BETWEEN '${start}' AND '${end}'`);
-    //console.log(reservas)
+    u.fullname,
+    r.fecha 
+    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE start BETWEEN '${start}' AND '${end}'
+    ORDER BY start`);
+    // console.log(reservas)
     res.send(reservas);
 });
 /*$resul = false;
@@ -139,6 +143,7 @@ router.get('/orden', isLoggedIn, async (req, res) => {
     r.id idreserva, 
     r.title, 
     r.start, 
+    r.fecha,
     r.partida, 
     r.destino, 
     r.pax,
@@ -165,7 +170,7 @@ router.get('/orden', isLoggedIn, async (req, res) => {
     if (r.id.length) {
         qery += ' WHERE o.id = ?'
         const orden = await pool.query(qery, r.id);
-        orden[0].start = moment.utc(r.f).format('LLL');
+        // orden[0].start = moment.utc(r.f).format('LLL');
         const imag = { i: `http://api.qrserver.com/v1/create-qr-code/?data=https://tqtravel.herokuapp.com/ordendeservicio?id=${r.id}` }
         res.render('links/orden', { orden, imag });
 
@@ -205,11 +210,12 @@ router.get('/recarga', isLoggedIn, (req, res) => {
 });
 router.post('/add', isLoggedIn, async (req, res) => {
     const { id, title, cliente, pasajeros, start, docgrupo, grupo, adicionales, guia, ruta,
-        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax } = req.body;
+        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax, fecha } = req.body;
     const ingreso = {
         title, cliente, pasajeros, start, docgrupo, grupo, adicionales, guia, ruta,
-        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax
+        partida, destino, observaciones, usuario, creador, valor, vuelo, idavuelta, pax, fecha
     };
+    console.log(ingreso)
     await pool.query('INSERT INTO reservas set ?', ingreso);
     res.send(true);
 });
@@ -233,7 +239,8 @@ router.post('/edit', isLoggedIn, async (req, res) => {
         valor,
         vuelo,
         idavuelta,
-        pax
+        pax,
+        fecha
     } = req.body;
     const ide = {
         title,
@@ -253,8 +260,12 @@ router.post('/edit', isLoggedIn, async (req, res) => {
         valor,
         vuelo,
         idavuelta,
-        pax
+        pax,
+        fecha
     };
+
+    console.log(ide)
+
     if (ide.ruta === '') {
         res.send('Error al acualizar esta reserva no se encontro la Ruta, registre la ruta antes de esditar la reserva');
     } else if (ide.cliente === '') {
@@ -263,6 +274,7 @@ router.post('/edit', isLoggedIn, async (req, res) => {
         await pool.query(`UPDATE reservas SET ? WHERE id = ?`, [ide, id]);
         res.send(true);
     }
+
     //delete req.body.id;
 });
 
