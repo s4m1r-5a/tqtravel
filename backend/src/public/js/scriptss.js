@@ -956,6 +956,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
         },
         eventRender: function (event, element) {            
             var content = [ 
+                `<div >ID: ${event.id}</div>`,
                 `<div >${moment.unix(event.fecha).format('LLLL')}</div>`,
                 `<div >Origen : ${event.partida}</div>`,
                 `<div >Destino : ${event.destino}</div>`,

@@ -22,14 +22,11 @@ router.get('/calendario', async (req, res) => {
 router.get('/reservas', async (req, res) => {
     let start = req.query.start || '2018-01-30',
         end = req.query.end || '2025-12-31'
-
-        console.log(req.query)
     const reservas = await pool.query(`SELECT 
     r.id, 
     r.title,
     r.cliente, 
     r.pax, 
-    r.start,
     r.ruta, 
     r.partida, 
     r.destino, 
@@ -44,10 +41,10 @@ router.get('/reservas', async (req, res) => {
     r.factura, 
     u.fullname,
     r.fecha 
-    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE start BETWEEN '${start}' AND '${end}'
-    ORDER BY start`);
-    // console.log(reservas)
-    res.send(reservas);
+    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}'
+    ORDER BY r.id`);
+    const data = reservas.map(e => ({...e, start: moment.unix(e.fecha).format('YYYY-MM-DD HH:mm')}))
+    res.send(data);
 });
 /*$resul = false;
 $start = (isset($_GET['start'])) ? $_GET['start'] : '2018-01-30';
@@ -103,14 +100,14 @@ router.post('/eliminarfactura', async (req, res) => {
 router.post('/report', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND start BETWEEN '${start}' AND '${end}'`);
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
 router.post('/report2', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE start BETWEEN '${start}' AND '${end}'`);
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
