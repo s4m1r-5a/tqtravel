@@ -75,8 +75,7 @@ router.get('/factura', isLoggedIn, async (req, res) => {
     const reserv = await pool.query(`SELECT * FROM  reservas WHERE id IN(${reservs})`);
     const client = await pool.query(`SELECT * FROM clientes WHERE id = ? OR nombre = ?`, [reserv[0].cliente, cliente]);
     reserv.map((t) => {
-        o = moment(t.start).tz("America/New_York")
-        t.start = o.utc().format();
+        t.start = moment.unix(t.fecha).format('YYYY-MM-DD HH:mm');
         t.pasajeros = t.pasajeros.split(',')[0]
     });
     res.render('links/factura', { datosc, client, reserv });
@@ -114,9 +113,9 @@ router.post('/report2', async (req, res) => {
 router.post('/fact', async (req, res) => {
     let start = req.query.start || '2019-01-01',
         end = req.query.end || '2025-12-31'
-    const facturas = await pool.query(`SELECT * FROM facturas WHERE fecha BETWEEN '${start}' AND '${end}'`);
-    facturar = { "data": facturas };
-    res.send(facturar);
+    const facturas = await pool.query(`SELECT * FROM facturas WHERE date BETWEEN ${moment(start).unix()} AND ${moment(end).unix()}`);
+    
+    res.send({ "data": facturas });
 });
 // Orden de servicio
 router.get('/ordendeservicio', isLoggedIn, async (req, res) => {

@@ -1350,6 +1350,7 @@ if (window.location == `${window.location.origin}/links/facturas`) {
                             const { client, num, bookings, total } = facture
                             let datosfactura = {
                                 cliente: client,
+                                date: moment().unix(),
                                 nreservas: num,
                                 reservas: bookings.join("-"),
                                 total: total,
@@ -1560,7 +1561,7 @@ if (window.location == `${window.location.origin}/links/facturas`) {
                             <i class="align-middle mr-2" data-feather="file-text"></i> <span class="align-middle">Facturar</span>
                        </div>`,
                 attr: {
-                    title: 'Fecha',
+                    title: 'Facturar',
                     id: 'facturar'
                 },
                 className: 'btn btn-secondary',
@@ -1616,9 +1617,9 @@ if (window.location == `${window.location.origin}/links/facturas`) {
         columns: [
             { data: "id" },
             {
-                data: "fecha",
+                data: "date",
                 render: function (data, method, row) {
-                    return moment(data).format('LLL') //pone la fecha en un formato entendible
+                    return moment.unix(data).format('LLL') //pone la fecha en un formato entendible
                 }
             },
             { data: "cliente" },
@@ -1633,7 +1634,6 @@ if (window.location == `${window.location.origin}/links/facturas`) {
             { data: "estado" },
             {
                 defaultContent: `<a id="verFactura" class="ver"><i class="align-middle mr-1 far fa-fw fa-eye"></i></a>
-                            <a id="editarFactura" class="edit"><i class="align-middle mr-1 far fa-fw fa-edit"></i></a>
                             <a id="eliminarFactura" class="elim"><i class="align-middle mr-1 far fa-fw fa-trash-alt"></i></a>`
             }
         ]
