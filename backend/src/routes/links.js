@@ -41,7 +41,7 @@ router.get('/reservas', async (req, res) => {
     r.factura, 
     u.fullname,
     r.fecha 
-    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}'
+    FROM reservas r INNER JOIN users u ON r.usuario = u.id WHERE fecha BETWEEN ${moment(start).unix()} AND ${moment(end).unix()}
     ORDER BY r.id`);
     const data = reservas.map(e => ({...e, start: moment.unix(e.fecha).format('YYYY-MM-DD HH:mm')}))
     res.send(data);
@@ -100,14 +100,14 @@ router.post('/eliminarfactura', async (req, res) => {
 router.post('/report', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}`);
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE factura IS NULL AND fecha BETWEEN ${moment(start).unix()} AND ${moment(end).unix()}`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
 router.post('/report2', async (req, res) => {
     let start = req.query.start || '2020-01-01',
         end = req.query.end || '2025-12-31'
-    const reservs = await pool.query(`SELECT * FROM reservas WHERE fecha BETWEEN '${moment(start).unix()}' AND '${moment(end).unix()}`);
+    const reservs = await pool.query(`SELECT * FROM reservas WHERE fecha BETWEEN ${moment(start).unix()} AND ${moment(end).unix()}`);
     respuesta = { "data": reservs };
     res.send(respuesta);
 });
