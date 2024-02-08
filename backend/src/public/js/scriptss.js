@@ -599,6 +599,9 @@ if (window.location == `${window.location.origin}/links/calendario`) {
         }
     });
     $('#editarreserva').click(function () {
+        const factura = $('#factura').val() || null
+       if (factura) return alert('Esta reserva pertenece a una factura, para editarla debe primero eliminar la factura que la contiene')
+    
         $('#editarreserva').hide('slow');
         $(".editar input").prop('disabled', false);
         $(".editar button").prop('disabled', false);
@@ -608,27 +611,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
         $(".editar input").hide();
         $(".editar input").show('slow');
     })
-
-    /*$('#npasajeros').change(function () {
-        
-        if ($('#destino').val() !== "" && $('#yvuelta').val() === 'SI...') {
-            
-        } else if ($('#destino').val() !== "") {
-            if ($(this).val() >= 1 && $(this).val() <= 3) {
-                
-            } else if ($(this).val() >= 4 && $(this).val() <= 7) {
-                
-            } else if ($(this).val() >= 8 && $(this).val() <= 11) {
-                
-            } else if ($(this).val() >= 12 && $(this).val() <= 15) {
-                
-            } else if ($(this).val() >= 16 && $(this).val() <= 20) {
-               
-            } else if ($(this).val() >= 21 && $(this).val() <= 23) {
-                $('#precio').val(Moneda(parseFloat(valors[5].replace(/(?!\w|\s).| /g, ""))));
-            };
-        };
-    })*/
+    
     $('#irOrden').on('click', function () {
         RecolectarDatosGUI();
         var url = `/links/ordendeservicio?id=${NuevoEvento.id}&title=${NuevoEvento.title}`;
@@ -645,6 +628,9 @@ if (window.location == `${window.location.origin}/links/calendario`) {
         EnviarInformacion(accion, NuevoEvento);
     });
     $('#eliminar').on('click', function () {
+        const factura = $('#factura').val() || null
+        if (factura) return alert('Esta reserva pertenece a una factura, para eliminarla debe primero eliminar la factura que la contiene')
+        
         let eliminar = $('#idreserv').val();
         $('#ModalEventos').modal('toggle');
         $("#ModalConfir").modal();
@@ -689,6 +675,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             $(this).val($(this).val().toLowerCase().trim().split(' ').map(v => v[0].toUpperCase() + v.substr(1)).join(' '))
         }
     });
+
     $('.cerrarClient').click(function () {
         $('.editar').show("slow");
         $('.modal-header').show("slow");
@@ -987,8 +974,10 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             clik = true
         }, //Cuando se da click en un espacio vacio de un dia del calendario
         eventClick: function (calEvent, jsEvent, view) {
+            console.log('entro aqui en este evento')
             $('#fecha').data('daterangepicker').setStartDate(moment.unix(calEvent.fecha).format('YYYY-MM-DD HH:mm'));
             $('#eliminar').show();
+            $('#factura').val(calEvent.factura);
             $('#idreserv').val(calEvent.id);
             $("#reserva").val(calEvent.title);
             $("#cliente").val(calEvent.cliente)
@@ -1029,6 +1018,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
             $('#fecha').data('daterangepicker').setStartDate(moment.unix(calEvent.fecha).format('YYYY-MM-DD HH:mm'));
             $('#eliminar').show();
             $('#idreserv').val(calEvent.id);
+            $('#factura').val(calEvent.factura);
             $("#reserva").val(calEvent.title);
             $("#cliente").val(calEvent.cliente)
             $("#ruta").val(calEvent.ruta)
@@ -1066,6 +1056,7 @@ if (window.location == `${window.location.origin}/links/calendario`) {
 
     $('#ModalEventos').on('hidden.bs.modal', function () {
         $('#idreserv').val('');
+        $('#factura').val('');
         $('#ruta').val('');
         $('#cliente').val('');
         $("spam.reserva").html('');
