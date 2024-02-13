@@ -600,10 +600,11 @@ if (window.location == `${window.location.origin}/links/calendario`) {
     });
     $('#editarreserva').click(function () {
         const factura = $('#factura').val() || null
-       if (factura) return alert('Esta reserva pertenece a una factura, para editarla debe primero eliminar la factura que la contiene')
+       if (factura) alert('Esta reserva pertenece a una factura, no podras editar algunos campos hasta no haber primero eliminado la factura que la contiene')
     
         $('#editarreserva').hide('slow');
-        $(".editar input").prop('disabled', false);
+        if (factura) $(".editar input:not(.block)").prop('disabled', false);
+        else $(".editar input").prop('disabled', false);
         $(".editar button").prop('disabled', false);
         $(".editar textarea").prop('disabled', false);
         $('.editarf').show('slow')
